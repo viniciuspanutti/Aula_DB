@@ -1,0 +1,87 @@
+-- atividade avaliativa CLUBE DO LIVRO
+-- Vinícius Panutti Salgado// RA 25007329
+
+SHOW DATABASES;
+CREATE DATABASE atividade_avaliativa;
+USE atividade_avaliativa;
+SELECT * FROM autores_v;
+SELECT * FROM editoras_v;
+SELECT * FROM audiobooks_v;
+
+-- ex 01
+CREATE TABLE autores_v(
+id_autora_v INT PRIMARY KEY,
+nome_v VARCHAR(50) NOT NULL,
+nacionalidade_v VARCHAR(50) NOT NULL);
+
+-- ex 02
+CREATE TABLE editoras_v(
+id_editora_v INT PRIMARY KEY,
+nome_v VARCHAR(50) NOT NULL,
+pais_v VARCHAR(50) NOT NULL);
+
+-- ex 03
+CREATE TABLE audiobooks_v(
+id_audiobook_v INT PRIMARY KEY,
+titulo_v VARCHAR(50) NOT NULL,
+genero_v VARCHAR(50) NOT NULL,
+id_autora_v INT NOT NULL,
+id_editora_v INT NOT NULL);
+
+-- ex 04
+ALTER TABLE audiobooks_v ADD CONSTRAINT fk_id_autora_v FOREIGN KEY (id_autora_V) REFERENCES autores_V(id_autora_V);
+
+-- 05
+ALTER TABLE audiobooks_v ADD CONSTRAINT fk_id_editora_v FOREIGN KEY (id_editora_v) REFERENCES editoras_v(id_editora_v);
+
+-- ex 06
+ALTER TABLE audiobooks_v ADD COLUMN duracao_v INT NOT NULL;
+
+-- ex 07
+ALTER TABLE audiobooks_v ADD COLUMN data_lancamento_v DATE NOT NULL;
+
+-- ex 08
+INSERT INTO autores_v(id_autora_v, nome_v, nacionalidade_v) VALUES (1, 'Machado de Assis', 'Brasileira');
+
+-- ex 09
+INSERT INTO editoras_v(id_editora_v, nome_v, pais_v) VALUES (1, 'Editora Brasil', 'Brasil');
+
+-- ex10
+INSERT INTO audiobooks_v(id_audiobook_v, titulo_v, genero_v, id_autora_v, id_editora_v, duracao_v, data_lancamento_v) VALUES (1, 'Dom Casmurro', 'Romance', 1, 1, 480, '1899-01-01');
+
+-- ex11
+INSERT INTO autores_v(id_autora_v, nome_v, nacionalidade_v) VALUES (2, 'Douglas Adams', 'Britânica');
+
+-- ex 12
+INSERT INTO audiobooks_v(id_audiobook_v, titulo_v, genero_v, id_autora_v, id_editora_v, duracao_v, data_lancamento_v) VALUES (2, 'O Guia do Mochileiro das Galáxias', 'Ficção Científica', 2, 1, 700, '1979-10-12');
+
+-- ex 13
+ALTER TABLE audiobooks_v DROP FOREIGN KEY fk_id_editora_v;
+
+-- ex 14
+ALTER TABLE audiobooks_v DROP COLUMN id_editora_v;
+
+-- ex 15
+DROP TABLE editoras_v;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
