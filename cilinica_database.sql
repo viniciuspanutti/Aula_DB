@@ -1,11 +1,13 @@
 -- atividade avaliativa Clínica veterinária
 -- Vinícius Panutti Salgado// RA 25007329
  
-SHOW DATABASES;
-CREATE DATABASE clinica_db_v;
-USE clinica_db_v;
+-- SHOW DATABASES;
+-- CREATE DATABASE clinica_db_v;
+-- USE clinica_db_v;
+-- SHOW TABLES;
 
--- 1ª Etapa: Criação de Tabelas (adaptar ao seu nome)
+
+-- 1ª Etapa: Criação de Tabelas
 CREATE TABLE tutores_v (
 id_tutor_v INT PRIMARY KEY,
 nome_v VARCHAR(100),
@@ -36,6 +38,7 @@ retorno_v BOOLEAN,
 FOREIGN KEY (id_animal_v) REFERENCES animais_v(id_animal_v)
 );
 
+
 -- 2ª Etapa: Inserção de Dados
 INSERT INTO tutores_v (id_tutor_v, nome_v, telefone_v, email_v, endereco_v) VALUES
 (1, 'Carlos Mendes', '11999887766', 'carlos@email.com', 'Rua das Flores, 123'),
@@ -43,6 +46,7 @@ INSERT INTO tutores_v (id_tutor_v, nome_v, telefone_v, email_v, endereco_v) VALU
 (3, 'Juliana Silva', '11977665544', 'juliana@email.com', 'Rua Verde, 789'),
 (4, 'Roberto Nunes', '11966554433', 'roberto@email.com', 'Travessa Sol, 321'),
 (5, 'Fernanda Dias', '11955443322', 'fernanda@email.com', 'Alameda Azul, 852');
+
 
 INSERT INTO animais_v (id_animal_v, nome_v, especie_v, raca_v, idade_v, peso_v, sexo_v, id_tutor_v) VALUES
 (1, 'Toby', 'Cão', 'Labrador', 5, 28.5, 'M', 1),
@@ -70,6 +74,7 @@ INSERT INTO consultas_v (id_consulta_v, id_animal_v, data_consulta_v, procedimen
 (11, 10, '2025-04-25', 'Vacinação múltipla', 90.0, True),
 (12, 2, '2025-05-05', 'Retorno Consulta', 0.0, False);
 
+
 -- 3ª Etapa: Exercícios SQL
 -- 1. Altere o peso do animal chamado 'Thor' para 33.5 kg.
 UPDATE animais_v
@@ -85,9 +90,10 @@ SELECT
     a.nome_v AS nome_animal,
     t.nome_v AS nome_tutor
 FROM
-    animais_v AS a
-JOIN
-    tutores_v AS t ON a.id_tutor_v = t.id_tutor_v;
+    animais_v AS a,
+    tutores_v AS t
+WHERE
+    a.id_tutor_v = t.id_tutor_v;
 
 -- 4. Quais animais têm peso maior que 25 kg? Mostre nome, espécie e peso.
 SELECT
@@ -104,7 +110,7 @@ UPDATE consultas_v
 SET retorno_v = TRUE
 WHERE id_animal_v = (SELECT id_animal_v FROM animais_v WHERE nome_v = 'Mimi');
 
--- 6. Delete todos os animais do tutor 'Juliana Silva'.
+-- 6. Delete todos os animais do tutor 'Juliana Silva'..
 DELETE FROM consultas_v
 WHERE id_animal_v IN (SELECT id_animal_v FROM animais_v WHERE id_tutor_v = (SELECT id_tutor_v FROM tutores_v WHERE nome_v = 'Juliana Silva'));
 
@@ -115,24 +121,16 @@ WHERE id_tutor_v = (SELECT id_tutor_v FROM tutores_v WHERE nome_v = 'Juliana Sil
 -- 7. Liste o nome de cada animal e o total que ele gastou em consultas.
 SELECT
     a.nome_v AS nome_animal,
-    SUM(c.valor_v) AS total_gasto
+    (SELECT SUM(c.valor_v) FROM consultas_v AS c WHERE c.id_animal_v = a.id_animal_v) AS total_gasto
 FROM
-    animais_v AS a
-JOIN
-    consultas_v AS c ON a.id_animal_v = c.id_animal_v
-GROUP BY
-    a.nome_v;
+    animais_v AS a;
 
 -- 8. Mostre o nome de cada tutor e a quantidade de animais sob seus cuidados.
 SELECT
     t.nome_v AS nome_tutor,
-    COUNT(a.id_animal_v) AS quantidade_animais
+    (SELECT COUNT(a.id_animal_v) FROM animais_v AS a WHERE a.id_tutor_v = t.id_tutor_v) AS quantidade_animais
 FROM
-    tutores_v AS t
-LEFT JOIN
-    animais_v AS a ON t.id_tutor_v = a.id_tutor_v
-GROUP BY
-    t.nome_v;
+    tutores_v AS t;
 
 -- 9. Acrescente 1 ano à idade de todos os animais da espécie 'Cão'.
 UPDATE animais_v
@@ -144,14 +142,17 @@ SELECT
     a.nome_v AS nome_animal,
     c.data_consulta_v
 FROM
-    animais_v AS a
-JOIN
-    consultas_v AS c ON a.id_animal_v = c.id_animal_v
+    animais_v AS a,
+    consultas_v AS c
 WHERE
-    a.especie_v = 'Gato';
-    
+    a.id_animal_v = c.id_animal_v
+    AND a.especie_v = 'Gato';    
 
-SELECT * FROM tutores_v;
-SELECT * FROM animais_v;
-SELECT * FROM consultas_v;
-DROP DATABASE clinica_db_v;
+
+-- SELECT * FROM tutores_v;
+-- SELECT * FROM animais_v;
+-- SELECT * FROM consultas_v;
+-- USE clinica_db_v;
+-- SHOW TABLES;
+-- Quit game:
+-- DROP DATABASE clinica_db_v;
