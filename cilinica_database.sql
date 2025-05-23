@@ -38,7 +38,7 @@ CREATE TABLE consultas_v (
     FOREIGN KEY (id_animal_v) REFERENCES animais_v(id_animal_v)
 );
 
----
+
 
 -- 2ª Etapa: Inserção de Dados
 INSERT INTO tutores_v (id_tutor_v, nome_v, telefone_v, email_v, endereco_v) VALUES
@@ -73,8 +73,6 @@ INSERT INTO consultas_v (id_consulta_v, id_animal_v, data_consulta_v, procedimen
 (10, 9, '2025-04-20', 'Consulta Rotina', 110.0, FALSE),
 (11, 10, '2025-04-25', 'Vacinação múltipla', 90.0, TRUE),
 (12, 2, '2025-05-05', 'Retorno Consulta', 0.0, FALSE);
-
----
 
 -- 3ª Etapa: Exercícios SQL
 -- 1. Altere o peso do animal chamado 'Thor' para 33.5 kg.
@@ -111,11 +109,11 @@ SET retorno_v = TRUE
 WHERE id_animal_v = (SELECT id_animal_v FROM animais_v WHERE nome_v = 'Mimi');
 
 -- 6. Delete todos os animais do tutor 'Juliana Silva'.
--- Primeiro, delete as consultas associadas a esses animais
+-- Primeiro deletando as consultas associadas a esses animais
 DELETE FROM consultas_v
 WHERE id_animal_v IN (SELECT id_animal_v FROM animais_v WHERE id_tutor_v = (SELECT id_tutor_v FROM tutores_v WHERE nome_v = 'Juliana Silva'));
 
--- Depois, delete os animais
+-- Depois, deletando os animais
 DELETE FROM animais_v
 WHERE id_tutor_v = (SELECT id_tutor_v FROM tutores_v WHERE nome_v = 'Juliana Silva');
 
@@ -144,6 +142,7 @@ GROUP BY
 -- 9. Acrescente 1 ano à idade de todos os animais da espécie 'Cão'.
 UPDATE animais_v
 SET idade_v = idade_v + 1
+ 
 WHERE especie_v = 'Cão';
 
 -- 10. Liste o nome e a data das consultas realizadas para animais da espécie 'Gato'.
